@@ -1,0 +1,7 @@
+# Maven build results
+/target/
+
+# Eclipse project data
+/.settings/
+/.classpath
+/.project
