@@ -48,9 +48,9 @@ public class CrystalCaseFactory {
 
     private void loadPictures() {
         try {
-            cdCase = ImageIO.read(MainWindow.class.getResource("/dbox2/img/coverflow/floppydisk.png"));
-            stitch = ImageIO.read(MainWindow.class.getResource("/dbox2/img/coverflow/stitch.png"));
-            reflections = ImageIO.read(MainWindow.class.getResource("/dbox2/img/coverflow/reflections.png"));
+            cdCase = ImageIO.read(MainWindow.class.getResource("/no/truben/dbox/img/coverflow/floppydisk.png"));
+            stitch = ImageIO.read(MainWindow.class.getResource("/no/truben/dbox/img/coverflow/stitch.png"));
+            reflections = ImageIO.read(MainWindow.class.getResource("/no/truben/dbox/img/coverflow/reflections.png"));
             mask = createGradientMask(cdCase.getWidth(), cdCase.getHeight());
         } catch (IOException e) {
         }

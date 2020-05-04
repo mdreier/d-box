@@ -462,7 +462,7 @@ public class CDShelf extends JPanel {
                 ApplicationBean di = MainWindow.bl.getGame(s);
                 String ikon = di.getIcon();
                 if(ikon.equals("")) {
-                    artworks.add(MainWindow.class.getResource("/dbox2/img/coverflow/no-cover.png"));
+                    artworks.add(MainWindow.class.getResource("/no/truben/dbox/img/coverflow/no-cover.png"));
                 }
                 else
                     try {
