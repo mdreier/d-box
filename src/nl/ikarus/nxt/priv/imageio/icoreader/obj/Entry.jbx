@@ -1,0 +1,14 @@
+[PropertyInfo]
+bitCount,int,false,false, , ,false,<default>
+bytesInResource,int,false,false, , ,false,<default>
+colorCount,short,false,false, , ,false,<default>
+height,short,false,false, , ,true,<default>
+imageOffset,int,false,false, , ,false,<default>
+planes,int,false,false, , ,false,<default>
+reserved,short,false,false, , ,false,<default>
+width,short,false,false, , ,true,<default>
+[IconNames]
+
+
+
+

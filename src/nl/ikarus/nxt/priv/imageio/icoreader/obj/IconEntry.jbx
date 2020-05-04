@@ -1,0 +1,17 @@
+[PropertyInfo]
+bitCount,int,false,false, , ,true,<default>
+bitmap,nl.ikarus.nxt.priv.imageio.icoreader.obj.Bitmap,false,false, , ,true,<default>
+bytesInResource,int,false,false, , ,true,<default>
+colorCount,int,false,false, , ,true,<default>
+height,int,false,false, , ,true,<default>
+imageData,byte[],false,false, , ,false,<default>
+imageOffset,int,false,false, , ,true,<default>
+mask,nl.ikarus.nxt.priv.imageio.icoreader.obj.Bitmap1,false,false, , ,false,<default>
+planes,int,false,false, , ,true,<default>
+reserved,int,false,false, , ,true,<default>
+width,int,false,false, , ,true,<default>
+[IconNames]
+
+
+
+
