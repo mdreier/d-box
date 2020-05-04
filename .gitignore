@@ -5,3 +5,6 @@
 /.settings/
 /.classpath
 /.project
+
+# NetBeans folder
+/nbproject
