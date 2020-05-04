@@ -8,3 +8,7 @@
 
 # NetBeans folder
 /nbproject
+
+# DOSBox outputs
+stderr.txt
+stdout.txt
