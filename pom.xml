@@ -8,9 +8,10 @@
 	<artifactId>d-box</artifactId>
 	<packaging>jar</packaging>
 	<version>2.3-SNAPSHOT</version>
-
-	<name>Maven Quick Start Archetype</name>
-	<url>http://maven.apache.org</url>
+	
+	<name>d-box</name>
+	<description>A DosBox Frontend </description>
+	<url>https://dbox.truben.no/</url>
 
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
@@ -42,6 +43,20 @@
 
 	<build>
 		<plugins>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.11</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -82,5 +97,88 @@
 
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>build-helper-maven-plugin</artifactId>
+										<versionRange>[1.11,)</versionRange>
+										<goals>
+											<goal>parse-version</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute></execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>native</id>
+			<!-- The jpackager executable is only available in JDK 14 and higher -->
+			<activation>
+				<jdk>[14,)</jdk>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						
+						<configuration>
+							<!-- Path determined from jdk toolchain -->
+							<executable>jpackage</executable>
+							<arguments>
+								<argument>-i</argument>
+								<argument>${project.build.directory}</argument>
+								<argument>-d</argument>
+								<argument>${project.build.directory}</argument>
+								<argument>-n</argument>
+								<argument>${project.artifactId}</argument>
+								<argument>--app-version</argument>
+								<argument>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</argument>
+								<argument>--description</argument>
+								<argument>${project.description}</argument>
+								<argument>--license-file</argument>
+								<argument>${project.basedir}/LICENSE</argument>
+								<argument>--win-dir-chooser</argument>
+								<argument>--win-menu</argument>
+								<argument>--win-menu-group</argument>
+								<argument>${project.name}</argument>
+								<argument>--main-jar</argument>
+								<argument>${project.build.finalName}-jar-with-dependencies.jar</argument>
+							</arguments>
+						</configuration>
+						
+						<executions>
+							<execution>
+								<id>native-image</id>
+								<phase>package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
