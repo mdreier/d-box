@@ -12,13 +12,58 @@
 	<name>d-box</name>
 	<description>A DosBox Frontend </description>
 	<url>https://dbox.truben.no/</url>
-
+	
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
-		<jarWithDependenciesName></jarWithDependenciesName>
 	</properties>
-
+	
+	<organization>
+		<name>d-box Project</name>
+		<url>https://github.com/mdreier/d-box</url>
+	</organization>
+	<scm>
+		<url>https://github.com/mdreier/d-box</url>
+		<connection>scm:git:https://github.com/mdreier/d-box.git</connection>
+		<developerConnection>scm:git:https://github.com/mdreier/d-box.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/mdreier/d-box/issues</url>
+	</issueManagement>
+	<distributionManagement>
+		<downloadUrl>https://github.com/mdreier/d-box/releases</downloadUrl>
+		<repository>
+			<id>github</id>
+			<name>GitHub d-box Packages</name>
+			<url>https://maven.pkg.github.com/mdreier/d-box</url>
+		</repository>
+	</distributionManagement>
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub d-box Packages</name>
+			<url>https://maven.pkg.github.com/mdreier/d-box</url>
+		</repository>
+	</repositories>
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 2</name>
+			<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.jdesktop</groupId>
