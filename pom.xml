@@ -16,6 +16,7 @@
 	<properties>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
+		<jarWithDependenciesName></jarWithDependenciesName>
 	</properties>
 
 	<dependencies>
@@ -44,9 +45,34 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/full.xml</descriptor>
+					</descriptors>
+					<archive>
+						<manifest>
+							<mainClass>no.truben.dbox.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+
+			</plugin>
+			<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.11</version>
                 <executions>
                     <execution>
                         <id>parse-version</id>
@@ -70,35 +96,24 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass>no.truben.dbox.Main</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-
-			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.3.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.6.0</version>
+				</plugin>
+				<plugin>
+	                <groupId>org.codehaus.mojo</groupId>
+	                <artifactId>build-helper-maven-plugin</artifactId>
+	                <version>1.11</version>
+                </plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -140,7 +155,6 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.6.0</version>
 						
 						<configuration>
 							<!-- Path determined from jdk toolchain -->
@@ -163,7 +177,7 @@
 								<argument>--win-menu-group</argument>
 								<argument>${project.name}</argument>
 								<argument>--main-jar</argument>
-								<argument>${project.build.finalName}-jar-with-dependencies.jar</argument>
+								<argument>${project.artifactId}-${project.version}-full.jar</argument>
 							</arguments>
 						</configuration>
 						
@@ -177,6 +191,27 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+		                <groupId>org.codehaus.mojo</groupId>
+		                <artifactId>build-helper-maven-plugin</artifactId>
+		                <executions>
+		                    <execution>
+		                        <id>attach-native-image</id>
+		                        <phase>package</phase>
+		                        <goals>
+		                            <goal>attach-artifact</goal>
+		                        </goals>
+		                        <configuration>
+		                        	<artifacts>
+		                        		<artifact>
+		                        			<file>${project.build.directory}/${project.artifactId}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.exe</file>
+		                        			<type>exe</type>
+		                        		</artifact>
+		                        	</artifacts>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+		            </plugin>
 				</plugins>
 			</build>
 		</profile>
