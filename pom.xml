@@ -114,6 +114,11 @@
 	                <artifactId>build-helper-maven-plugin</artifactId>
 	                <version>1.11</version>
                 </plugin>
+                <plugin>
+               		<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M3</version>
+                </plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -145,13 +150,29 @@
 	
 	<profiles>
 		<profile>
-			<id>native</id>
-			<!-- The jpackager executable is only available in JDK 14 and higher -->
-			<activation>
-				<jdk>[14,)</jdk>
-			</activation>
+			<id>native-package</id>
 			<build>
 				<plugins>
+					<plugin>
+	               		<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>enforce-jdk-for-packager</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireJavaVersion>
+											<message>The jpackager executable is only available in JDK 14 and higher</message>
+											<version>[14,)</version>
+										</requireJavaVersion>
+									</rules>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -191,27 +212,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-		                <groupId>org.codehaus.mojo</groupId>
-		                <artifactId>build-helper-maven-plugin</artifactId>
-		                <executions>
-		                    <execution>
-		                        <id>attach-native-image</id>
-		                        <phase>package</phase>
-		                        <goals>
-		                            <goal>attach-artifact</goal>
-		                        </goals>
-		                        <configuration>
-		                        	<artifacts>
-		                        		<artifact>
-		                        			<file>${project.build.directory}/${project.artifactId}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.exe</file>
-		                        			<type>exe</type>
-		                        		</artifact>
-		                        	</artifacts>
-		                        </configuration>
-		                    </execution>
-		                </executions>
-		            </plugin>
 				</plugins>
 			</build>
 		</profile>
