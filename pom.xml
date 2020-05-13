@@ -40,6 +40,12 @@
 			<name>GitHub d-box Packages</name>
 			<url>https://maven.pkg.github.com/mdreier/d-box</url>
 		</repository>
+		<snapshotRepository>
+			<id>github</id>
+			<name>GitHub d-box Packages</name>
+			<url>https://maven.pkg.github.com/mdreier/d-box</url>
+			<uniqueVersion>true</uniqueVersion>			
+		</snapshotRepository>
 		<site>
 			<id>github-pages</id>
 			<url>scm:git:https://github.com/mdreier/d-box.git</url>
