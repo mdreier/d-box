@@ -42,6 +42,11 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
+    - name: Setup GIT token
+      uses: fregante/setup-git-token@v1
+      with:
+        token: ${{ github.token }}
+
     - name: Build site with Maven
       run: mvn -B site site:stage --file pom.xml
       
