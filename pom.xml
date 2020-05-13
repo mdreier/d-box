@@ -44,7 +44,6 @@
 			<id>github</id>
 			<name>GitHub d-box Packages</name>
 			<url>https://maven.pkg.github.com/mdreier/d-box</url>
-			<uniqueVersion>true</uniqueVersion>			
 		</snapshotRepository>
 		<site>
 			<id>github-pages</id>
@@ -202,6 +201,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>2.8</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>3.0.0-M1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
