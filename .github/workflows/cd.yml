@@ -47,11 +47,3 @@ jobs:
       
     - name: Publish site to GitHub Pages branch
       run: mvn -B scm-publish:publish-scm --file pom.xml
-
-    - name: Switch to GitHub Pages branch
-      run: git checkout gh-pages
-        
-    - name: Push changes to GitHub Pages
-      uses: ad-m/github-push-action@v0.5.0
-      with:
-        github_token: {{ github.token }}
