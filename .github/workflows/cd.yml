@@ -49,4 +49,4 @@ jobs:
       run: mvn -B site site:stage --file pom.xml
       
     - name: Publish site to GitHub Pages branch
-      run: mvn -B scm-publish:publish-scm --file pom.xml
+      run: mvn -B -Dusername=${{ github.actor }} -Dpassword=${{ github.token }} scm-publish:publish-scm --file pom.xml
