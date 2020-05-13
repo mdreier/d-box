@@ -43,7 +43,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Setup GIT token
-      run: git config --local user.name "`git log -1 --pretty=format:'%an'`" && git config --local user.email "`git log -1 --pretty=format:'%ae'`"
+      run: git config --global user.name "`git log -1 --pretty=format:'%an'`" && git config --global user.email "`git log -1 --pretty=format:'%ae'`"
 
     - name: Build site with Maven
       run: mvn -B site site:stage --file pom.xml
