@@ -7,7 +7,7 @@
 	<groupId>no.truben.dbox</groupId>
 	<artifactId>d-box</artifactId>
 	<packaging>jar</packaging>
-	<version>2.3-SNAPSHOT</version>
+	<version>2.3.0</version>
 
 	<name>d-box</name>
 	<description>A DosBox Frontend </description>
