@@ -116,7 +116,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1.0.0
         with:
-          path: VERSION
+          path: ${{ github.workspace }}/VERSION
       # Build native file
       - name: Build Native Image
         run: jpackage --input ${{ github.workspace }} --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --win-dir-chooser --win-menu --win-menu-group D-Box --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
@@ -127,6 +127,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: d-box-${{ steps.version.outputs.info }}.exe
-          asset_name: d-box-${{ steps.version.outputs.info }}.exe
+          asset_path: d-box-${{ steps.version.outputs.content }}.exe
+          asset_name: d-box-${{ steps.version.outputs.content }}.exe
           asset_content_type: application/vnd.microsoft.portable-executable
