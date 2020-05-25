@@ -35,7 +35,7 @@ jobs:
         xpath: /*[local-name(.)='project']/*[local-name(.)='version']
     - name: Assert Release Version
       if:
-        ${{ endsWith(steps.version.outputs.info, SNAPSHOT) }}
+        ${{ endsWith(steps.version.outputs.info, 'SNAPSHOT') }}
       run: |
         echo "Version ${{ steps.version.outputs.info }} is not a release version"
         exit 1
