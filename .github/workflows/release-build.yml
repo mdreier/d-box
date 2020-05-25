@@ -31,7 +31,7 @@ jobs:
       id: version
       uses: mavrosxristoforos/get-xml-info@1.0
       with:
-        xml-file: $GITHUB_WORKSPACE/pom.xml
+        xml-file: ${{ github.workspace }}/pom.xml
         xpath: /project/version
     - name: Assert Release Version
       if:
@@ -40,7 +40,7 @@ jobs:
     - name: Write Version File
       uses: DamianReeves/write-file-action@v1.0
       with:
-        path: VERSION
+        path: ${{ github.workspace }}/VERSION
         contents: ${{ steps.version.outputs.info }}
         write-mode: overwrite
     - name: Upload Version
@@ -51,21 +51,21 @@ jobs:
         path: VERSION
     # Run the Maven build
     - name: Build with Maven
-      run: mvn -B package -s $GITHUB_WORKSPACE/settings.xml --file pom.xml
+      run: mvn -B package -s ${{ github.workspace }}/settings.xml --file pom.xml
     # Archive the build results
     - name: Upload JAR artifacts
       uses: actions/upload-artifact@v2
       with:
         # Artifact name
         name: build-results
-        path: $GITHUB_WORKSPACE/target/*.jar
+        path: ${{ github.workspace }}/target/*.jar
     # Archive the license file
     - name: Upload License
       uses: actions/upload-artifact@v2
       with:
         # Artifact name
         name: license
-        path: $GITHUB_WORKSPACE/LICENSE
+        path: ${{ github.workspace }}/LICENSE
     # Attach build results to release
     - name: Attach release assets (Plain JAR)
       uses: actions/upload-release-asset@v1
@@ -116,7 +116,7 @@ jobs:
           path: VERSION
       # Build native file
       - name: Build Native Image
-        run: jpackage --input . --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --win-dir-chooser --win-menu --win-menu-group D-Box --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
+        run: jpackage --input ${{ github.workspace }} --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --win-dir-chooser --win-menu --win-menu-group D-Box --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
       # Attach 
       - name: Attach release assets
         uses: actions/upload-release-asset@v1
