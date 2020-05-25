@@ -76,7 +76,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: $GITHUB_WORKSPACE/target/d-box-${{ steps.version.outputs.info }}.jar
+        asset_path: ${{ github.workspace }}/target/d-box-${{ steps.version.outputs.info }}.jar
         asset_name: d-box-${{ steps.version.outputs.info }}.jar
         asset_content_type: application/java-archive
     - name: Attach release assets (Full JAR)
@@ -85,7 +85,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./target/d-box-${{ steps.version.outputs.info }}-full.jar
+        asset_path: ${{ github.workspace }}/target/d-box-${{ steps.version.outputs.info }}-full.jar
         asset_name: d-box-${{ steps.version.outputs.info }}-full.jar
         asset_content_type: application/java-archive
   # Build native image for Windows
