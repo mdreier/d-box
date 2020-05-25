@@ -163,8 +163,6 @@ jobs:
         run: jpackage --input ${{ github.workspace }} --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --type deb --linux-menu-group D-Box --linux-shortcut --linux-app-release ${{ steps.version.outputs.content }} --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
       - name: Build Native RPM Image
         run: jpackage --input ${{ github.workspace }} --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --type rpm --linux-menu-group D-Box --linux-shortcut --linux-app-release ${{ steps.version.outputs.content }} --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
-      - name: Show build results
-        run: ls -l
       # Attach 
       - name: Attach release assets (DEB)
         uses: actions/upload-release-asset@v1
@@ -172,7 +170,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: d-box-${{ steps.version.outputs.content }}.deb
+          asset_path: d-box-${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}_amd64.deb
           asset_name: Linux DEB package (Debian/Ubuntu)
           asset_content_type: application/vnd.debian.binary-package
       - name: Attach release assets (RPM)
@@ -181,6 +179,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: d-box-${{ steps.version.outputs.content }}.x86_64.rpm
+          asset_path: d-box-${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}.x86_64.rpm
           asset_name: Linux RPM package (Fedora/CoreOS)
           asset_content_type: application/x-rpm
