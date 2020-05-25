@@ -31,8 +31,8 @@ jobs:
       id: version
       uses: mavrosxristoforos/get-xml-info@1.0
       with:
-        xml-file: ${{ github.workspace }}/pom.xml
-        xpath: /project/version
+        xml-file: pom.xml
+        xpath: /project/version/text()
     - name: Assert Release Version
       if:
         endsWith(${{ steps.version.outputs.info }}, SNAPSHOT)
