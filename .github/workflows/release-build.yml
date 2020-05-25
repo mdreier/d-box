@@ -224,4 +224,4 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: d-box-${{ steps.version.outputs.content }}.dmg
           asset_name: d-box-${{ steps.version.outputs.content }}.dmg
-          asset_content_type: application/vnd.debian.binary-package
+          asset_content_type: application/x-apple-diskimage
