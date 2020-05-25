@@ -171,6 +171,17 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: d-box_${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}_amd64.deb
+          asset_name: d-box_${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}_amd64.deb
+          asset_content_type: application/vnd.debian.binary-package
+      - name: Attach release assets (RPM)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: d-box-${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}.x86_64.rpm
+          asset_name: d-box-${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}.x86_64.rpm
+          asset_content_type: application/x-rpm
   native-osx:
     needs: [build]
     runs-on: macos-latest
