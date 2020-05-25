@@ -171,14 +171,46 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: d-box_${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}_amd64.deb
-          asset_name: d-box_${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}_amd64.deb
-          asset_content_type: application/vnd.debian.binary-package
-      - name: Attach release assets (RPM)
+  native-osx:
+    needs: [build]
+    runs-on: macos-latest
+    steps:
+      # Install Java 14
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      # Download previous results
+      - name: Download version
+        uses: actions/download-artifact@v2
+        with:
+          name: version
+      - name: Download build results
+        uses: actions/download-artifact@v2
+        with:
+          name: build-results
+      - name: Download license
+        uses: actions/download-artifact@v2
+        with:
+          name: license
+      # Read version data
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.0.0
+        with:
+          path: ${{ github.workspace }}/VERSION
+      # Build native file
+      - name: Build Native Image
+        run: jpackage --input ${{ github.workspace }} --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --mac-package-name D-Box --mac-package-identifier no.truben.dbox --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
+      - name: Show build result
+        run: ls -l
+      # Attach 
+      - name: Attach release assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: d-box-${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}.x86_64.rpm
-          asset_name: d-box-${{ steps.version.outputs.content }}-${{ steps.version.outputs.content }}.x86_64.rpm
-          asset_content_type: application/x-rpm
+          asset_path: d-box-${{ steps.version.outputs.content }}.dmg
+          asset_name: d-box-${{ steps.version.outputs.content }}.dmg
+          asset_content_type: application/vnd.debian.binary-package
