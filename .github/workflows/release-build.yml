@@ -36,7 +36,8 @@ jobs:
     - name: Assert Release Version
       if:
         endsWith(${{ steps.version.outputs.info }}, SNAPSHOT)
-      uses: cutenode/action-always-fail@v1.0.0
+      run: exit 1
+      shell: bash
     - name: Write Version File
       uses: DamianReeves/write-file-action@v1.0
       with:
