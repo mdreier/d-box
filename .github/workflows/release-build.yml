@@ -1,0 +1,129 @@
+# Build the application when a new release is created
+
+name: Release Build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  release:
+    types: [created]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:       
+  # Release build
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check out release tag
+      uses: actions/checkout@v2
+    # Set up JDK for Maven build
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: ${{ github.workspace }} # location for the settings.xml file
+    # Determine version and save as artifact
+    - name: Determine Version
+      id: version
+      uses: mavrosxristoforos/get-xml-info@1.0
+      with:
+        xml-file: pom.xml
+        xpath: /project/version
+    - name: Assert Release Version
+      if:
+        endsWith(${{ steps.version.outputs.info }}, SNAPSHOT)
+      uses: cutenode/action-always-fail@v1.0.0
+    - name: Write Version File
+      uses: DamianReeves/write-file-action@v1.0
+      with:
+        path: VERSION
+        contents: ${{ steps.version.outputs.info }}
+        write-mode: overwrite
+    - name: Upload Version
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: version
+        path: VERSION
+    # Run the Maven build
+    - name: Build with Maven
+      run: mvn -B package -s $GITHUB_WORKSPACE/settings.xml --file pom.xml
+    # Archive the build results
+    - name: Upload JAR artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: build-results
+        path: $GITHUB_WORKSPACE/target/*.jar
+    # Archive the license file
+    - name: Upload License
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: license
+        path: $GITHUB_WORKSPACE/LICENSE
+    # Attach build results to release
+    - name: Attach release assets (Plain JAR)
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: $GITHUB_WORKSPACE/target/d-box-${{ steps.version.outputs.info }}.jar
+        asset_name: d-box-${{ steps.version.outputs.info }}.jar
+        asset_content_type: application/java-archive
+    - name: Attach release assets (Full JAR)
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./target/d-box-${{ steps.version.outputs.info }}-full.jar
+        asset_name: d-box-${{ steps.version.outputs.info }}-full.jar
+        asset_content_type: application/java-archive
+  # Build native image for Windows
+  native-win:
+    needs: [build]
+    runs-on: windows-latest
+    steps:
+      # Install Java 14
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      # Download previous results
+      - name: Download version
+        uses: actions/download-artifact@v2
+        with:
+          name: version
+      - name: Download build results
+        uses: actions/download-artifact@v2
+        with:
+          name: build-results
+      - name: Download license
+        uses: actions/download-artifact@v2
+        with:
+          name: license
+      # Read version data
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.0.0
+        with:
+          path: VERSION
+      # Build native file
+      - name: Build Native Image
+        run: jpackage --input . --name d-box --app-version ${{ steps.version.outputs.content }} --license-file LICENSE --win-dir-chooser --win-menu --win-menu-group D-Box --main-jar d-box-${{ steps.version.outputs.content }}-full.jar
+      # Attach 
+      - name: Attach release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: d-box-${{ steps.version.outputs.info }}.exe
+          asset_name: d-box-${{ steps.version.outputs.info }}.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
